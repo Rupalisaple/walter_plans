@@ -1,7 +1,7 @@
 
 
 include <iRobot.scad>
-
+include <motor_support_decupat.scad> //motor_support();
 
 //global variables
 	lungime_bara_verticala = 333.5;
@@ -138,4 +138,7 @@ translate([-distanta_cadru / 2, -dimensiuni_ghidaj[1] / 2 - pozitie_ghidaj_cadru
 ghidaj_support();
 
 teava_ghidaj();
+
+translate(pozitie_bara_oriz_sp + [lungime_bara_orizontala-105, -2-80, 0])
+		motor_support();
 
