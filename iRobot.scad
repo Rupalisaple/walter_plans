@@ -1,5 +1,6 @@
 module irobot(irobot_diameter = 329.95) {
 	size_factor = 25.4/329.95 * irobot_diameter;
+	color([1, 0, 0])
 	translate([-irobot_diameter/2, irobot_diameter/2, 0])
 	scale([size_factor, size_factor, size_factor])
 	rotate([90,0,0])

@@ -1,7 +1,7 @@
 
 
 include <iRobot.scad>
-
+include <cilindru_ghidaj_suport_bara_filetata.scad>
 
 //global variables
 	lungime_bara_verticala = 333.5;
@@ -18,11 +18,17 @@ include <iRobot.scad>
 	pozitie_bara_oriz_sus_sp =[pozitie_bara_oriz_sp[0],
 	                           pozitie_bara_oriz_sp[1]+1,
 									  pozitie_bara_oriz_sp[2]+lungime_bara_verticala + 1];
-dimensiuni_ghidaj = [82, 20, 6];
+dimensiuni_ghidaj = [82, 24.3, 6];
 distanta_cadru = 69.85 + 15.1 +2; //distanta dintre cadru fata si cadru spate
 pozitie_ghidaj_cadru = 40; //distanta de la capat cadru la ghidaj
 raza_gaura_ghidaj_suport = 4;
 inaltime_bara_cilindrica = lungime_bara_verticala * 2.5;
+latime_ghidaj_suport_bara_filetata = 49.9;
+distanta_gaura = 3.5;      
+   
+//primul cub 
+inaltime_cub1 = 4.6;  
+dimensiuni_cub2 = [36, 36, 11.3];
 
 module screws(){
 }
@@ -37,9 +43,86 @@ module bara(len=100){
 	}
 }
 
+/*
+module cilindru_ghidaj_suport_bara_filetata(){
+	
+	//cilindru
+	difference(){
+	translate([dimensiuni_ghidaj[0] / 2, latime_ghidaj_suport_bara_filetata / 2, dimensiuni_cub2[2]])
+	cylinder (r = 12.8, h = 12.6, $fn = 50);
+	translate([dimensiuni_ghidaj[0] / 2, latime_ghidaj_suport_bara_filetata / 2, dimensiuni_cub2[2]])
+	cylinder (r = raza_gaura_ghidaj_suport, h =dimensiuni_cub2[1] + 6, $fn = 50);
+	} //end difference
+	//TODO: cilindru mai mic deasupra
+	
+}
+*/
 
-module ghidaj_support()
+module ghidaj_suport_bara_filetata(){
+		
+	translate ([-41,-10,0]) 	
+	difference(){
+		cube ([dimensiuni_ghidaj[0], latime_ghidaj_suport_bara_filetata, inaltime_cub1], center = false);
+		    
+		//gaura fata stanga
+		translate([distanta_gaura, distanta_gaura, 0])	
+      cube([5, 7, 6], center = false);
+		
+		//gaura fata dreapta
+		translate([distanta_gaura, latime_ghidaj_suport_bara_filetata - distanta_gaura, 0])
+	   rotate([90, 0, 0])
+		cube([5, 7, 6], center = false);
+
+		//gaura spate stanga
+		translate([dimensiuni_ghidaj[0] - 7, distanta_gaura, 0])	
+      cube([5, 7, 6], center = false);
+		
+		//gaura spate dreapta
+		translate([dimensiuni_ghidaj[0] - 7, latime_ghidaj_suport_bara_filetata - distanta_gaura, 0])
+	   rotate([90, 0, 0])
+		cube([5, 7, 6], center = false);
+
+		//gaura bara
+		translate([dimensiuni_ghidaj[0] / 2, latime_ghidaj_suport_bara_filetata / 2, 0])
+ 		cylinder (r = raza_gaura_ghidaj_suport, h = 6, $fn = 50);
+    }
+		
+		//al doilea cub
+		translate ([-41,-10,0]) 	
+		difference(){
+			translate([dimensiuni_ghidaj[0] / 2 - dimensiuni_cub2[0] / 2, latime_ghidaj_suport_bara_filetata / 2 - dimensiuni_cub2[0]/ 2, 0])
+			cube(dimensiuni_cub2);
+
+		//gaura bara cub2
+			translate([dimensiuni_ghidaj[0] / 2, latime_ghidaj_suport_bara_filetata / 2, 0])
+ 			cylinder (r = (dimensiuni_cub2[0]- 2 * 7.9) / 2, h =dimensiuni_cub2[1] + 6, $fn = 50);
+		
+		//gaura surub cub2 stanga fata
+	translate([dimensiuni_ghidaj[0] / 2 - dimensiuni_cub2[0] / 2 + 3, latime_ghidaj_suport_bara_filetata / 2 - dimensiuni_cub2[0]/ 2 + 3, 0])
+		cube([5, 7, dimensiuni_cub2[2]], center = false);
+
+		//gaura surub cub2 dreapta fata	
+translate([dimensiuni_ghidaj[0] / 2 - dimensiuni_cub2[0] / 2 + 3, latime_ghidaj_suport_bara_filetata / 2 - dimensiuni_cub2[0]/ 2 - 7 - 3 + dimensiuni_cub2[1], 0])
+		cube([5, 7, dimensiuni_cub2[2]], center = false);
+
+		//gaura surub cub2 stanga spate
+	translate([dimensiuni_cub2[0] -7 - 3 + dimensiuni_ghidaj[0] / 2 - dimensiuni_cub2[0] / 2 + 3, latime_ghidaj_suport_bara_filetata / 2 - dimensiuni_cub2[0]/ 2 + 3, 0])
+		cube([5, 7, dimensiuni_cub2[2]], center = false);
+
+//gaura surub cub2 dreapta spate	
+translate([dimensiuni_cub2[0] -7 - 3 + dimensiuni_ghidaj[0] / 2 - dimensiuni_cub2[0] / 2 + 3, 
+latime_ghidaj_suport_bara_filetata / 2 - dimensiuni_cub2[0]/ 2 - 7 - 3 + dimensiuni_cub2[1], 0])
+		cube([5, 7, dimensiuni_cub2[2]], center = false);
+		
+		//TODO: daca este nevoie se pot face gauri si in cubul de sub
+	} //end difference
+
+}
+
+
+module ghidaj_suport()
 {
+			
         difference(){
                 translate ([-41,-10,0]) cube (dimensiuni_ghidaj, center = false);
                 cylinder (r = raza_gaura_ghidaj_suport, h = 6, center = false, $fn = 50);
@@ -49,6 +132,20 @@ module ghidaj_support()
         }
 }
 
+
+module ghidaje_suport_sus_jos(){
+	translate(pozitie_bara_oriz_sus_sp)
+	rotate([0, 0, 90])
+	translate([-distanta_cadru / 2, -dimensiuni_ghidaj[1] / 2 - pozitie_ghidaj_cadru, 1])
+ghidaj_suport();
+
+	translate(pozitie_bara_oriz_sp)
+	rotate([0, 0, 90])
+	translate([-distanta_cadru / 2, -dimensiuni_ghidaj[1] / 2 - pozitie_ghidaj_cadru, 1])
+	ghidaj_suport();
+
+	teava_ghidaj();
+}
 
 module cadru(){	
 
@@ -124,18 +221,46 @@ module teava_ghidaj(){
 }
 
 
-
 irobot();
 cadru();
-translate(pozitie_bara_oriz_sus_sp)
-rotate([0, 0, 90])
-translate([-distanta_cadru / 2, -dimensiuni_ghidaj[1] / 2 - pozitie_ghidaj_cadru, 1])
-ghidaj_support();
+ghidaje_suport_sus_jos();
 
+//cilindru ghidaj suport bara filetata jos
 translate(pozitie_bara_oriz_sp)
 rotate([0, 0, 90])
-translate([-distanta_cadru / 2, -dimensiuni_ghidaj[1] / 2 - pozitie_ghidaj_cadru, 1])
-ghidaj_support();
+translate([-distanta_cadru / 2, -dimensiuni_ghidaj[1] / 2 - pozitie_ghidaj_cadru - latime_ghidaj_suport_bara_filetata - 2.5, 1])
+translate ([-41,-10,0]) 	
+translate([dimensiuni_ghidaj[0] / 2, latime_ghidaj_suport_bara_filetata / 2, dimensiuni_cub2[2]])
+	cilindru_ghidaj_suport_bara_filetata();
+	
 
-teava_ghidaj();
+	//bara filetata
+translate(pozitie_bara_oriz_sp)
+rotate([0, 0, 90])
+translate([-distanta_cadru / 2, -dimensiuni_ghidaj[1] / 2 - pozitie_ghidaj_cadru - latime_ghidaj_suport_bara_filetata - 2.5, 1])
+	translate ([-41,-10,0]) 	
+translate([dimensiuni_ghidaj[0] / 2, latime_ghidaj_suport_bara_filetata / 2, dimensiuni_cub2[2]])
+	cylinder (r = 5, h = inaltime_bara_cilindrica, $fn = 50);
 
+
+//ghidaj suport bara filetata jos
+translate(pozitie_bara_oriz_sp)
+rotate([0, 0, 90])
+translate([-distanta_cadru / 2, -dimensiuni_ghidaj[1] / 2 - pozitie_ghidaj_cadru - latime_ghidaj_suport_bara_filetata - 2.5, 1])
+ghidaj_suport_bara_filetata();
+
+//ghidaj suport bara filetata sus
+translate(pozitie_bara_oriz_sus_sp)
+rotate([0, 0, 90])
+translate([-distanta_cadru / 2, -dimensiuni_ghidaj[1] / 2 - pozitie_ghidaj_cadru - latime_ghidaj_suport_bara_filetata - 2.5, 1])
+ghidaj_suport_bara_filetata();
+
+
+//cilindru ghidaj suport bara filetata sus
+translate(pozitie_bara_oriz_sus_sp)
+rotate([0, 0, 90])
+translate([-distanta_cadru / 2, -dimensiuni_ghidaj[1] / 2 - pozitie_ghidaj_cadru - latime_ghidaj_suport_bara_filetata - 2.5, -1])
+translate ([-41,-10,0]) 	
+translate([dimensiuni_ghidaj[0] / 2, latime_ghidaj_suport_bara_filetata / 2, 0])
+rotate([0, 180, 0])
+	cilindru_ghidaj_suport_bara_filetata();
