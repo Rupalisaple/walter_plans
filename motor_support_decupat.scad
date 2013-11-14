@@ -14,7 +14,11 @@ module motor_support() {
 	color("black") translate([60, 50, 0]) cylinder(h=4, r=2);
 	color("black") translate([43, 50, 0]) cylinder(h=4, r=2);
 	color("black") translate([9, 24.6, 0]) cylinder(h=15.5, r=2);
-   }
-}
 
-motor_support();
+	
+	// Taieturi pentru suruburile pt bare
+	translate([80-11, 80-17, 0]) cube([11,17, 15.5]);
+	translate([80-11, 0, 0]) cube([11,17, 15.5]);
+   }
+	
+}
