@@ -15,5 +15,3 @@ module cilindru_ghidaj_suport_bara_filetata() {
 		
 	}
 }
-
-

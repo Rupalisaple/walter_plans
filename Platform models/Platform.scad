@@ -1,5 +1,3 @@
-
-
 include <iRobot.scad>
 include <cilindru_ghidaj_suport_bara_filetata.scad>
 include <motor_support_decupat.scad> //motor_support();
@@ -12,11 +10,11 @@ include <roata_mica_motor.scad>	    //motor_gear_m10(); - roata mica
     lungime_bara_verticala = 333.5;
     lungime_bara_orizontala = 267.5;
 
-    
+    grosime_bara_din_cadru = 15.1;
     pozitie_gaura = [-111.4650, 2.5960, 77.8];	// folosita la toate barele
-    pozitie_bara = pozitie_gaura + [-23.5, -15.1/2+1, 1]; // folosi a la barele verticale
-    pozitie_bara_oriz = pozitie_gaura + [-22.5, -15.1/2+2, 0];
-    pozitie_bara_oriz_sp = pozitie_gaura + [-22.5, +15.1/2 +2 +69.85, 0];
+    pozitie_bara = pozitie_gaura + [-23.5, -grosime_bara_din_cadru/2+1, 1]; // folosi a la barele verticale
+    pozitie_bara_oriz = pozitie_gaura + [-22.5, -grosime_bara_din_cadru/2+2, 0];
+    pozitie_bara_oriz_sp = pozitie_gaura + [-22.5, +grosime_bara_din_cadru/2 +2 +69.85, 0];
     pozitie_bara_oriz_sus_f =[pozitie_bara_oriz[0],
                             pozitie_bara_oriz[1]-1,
                                     pozitie_bara_oriz[2]+lungime_bara_verticala + 1];
@@ -24,7 +22,7 @@ include <roata_mica_motor.scad>	    //motor_gear_m10(); - roata mica
                             pozitie_bara_oriz_sp[1]+1,
                                     pozitie_bara_oriz_sp[2]+lungime_bara_verticala + 1];
     dimensiuni_ghidaj = [82, 24.3, 6];
-    distanta_cadru = 69.85 + 15.1 +2; //distanta dintre cadru fata si cadru spate
+    distanta_cadru = 69.85 + grosime_bara_din_cadru +2; //distanta dintre cadru fata si cadru spate
     pozitie_ghidaj_cadru = 40; //distanta de la capat cadru la ghidaj
     raza_gaura_ghidaj_suport = 4;
     inaltime_bara_cilindrica = lungime_bara_verticala * 2.5;
@@ -37,26 +35,11 @@ include <roata_mica_motor.scad>	    //motor_gear_m10(); - roata mica
 
 module bara(len=100){
     difference(){
-        cube([15.1, 15.1, len]);
+        cube([grosime_bara_din_cadru, grosime_bara_din_cadru, len]);
         translate([1,1])
-        cube([14.1, 14.1, len]);
+        cube([grosime_bara_din_cadru-1, grosime_bara_din_cadru-1, len]);
     }
 }
-
-/*
-module cilindru_ghidaj_suport_bara_filetata(){
-    
-    //cilindru
-    difference(){
-    translate([dimensiuni_ghidaj[0] / 2, latime_ghidaj_suport_bara_filetata / 2, dimensiuni_cub2[2]])
-    cylinder (r = 12.8, h = 12.6, $fn = 50);
-    translate([dimensiuni_ghidaj[0] / 2, latime_ghidaj_suport_bara_filetata / 2, dimensiuni_cub2[2]])
-    cylinder (r = raza_gaura_ghidaj_suport, h =dimensiuni_cub2[1] + 6, $fn = 50);
-    } //end difference
-    //TODO: cilindru mai mic deasupra
-    
-}
-*/
 
 module ghidaj_suport_bara_filetata(){
         
@@ -198,12 +181,12 @@ module cadru(){
     
     
     //Bara suport dreapta
-    translate([ -pozitie_bara[0] - 1, pozitie_bara[1] + 59.85 + 15.1 +2, pozitie_bara[2] + lungime_bara_verticala / 2])
+    translate([ -pozitie_bara[0] - 1, pozitie_bara[1] + 59.85 + grosime_bara_din_cadru +2, pozitie_bara[2] + lungime_bara_verticala / 2])
     rotate([45, 0, 0])
     cube([1, 15, 100]);
 
     //Bara suport stanga
-    translate([ pozitie_bara[0] + 1, pozitie_bara[1] + 59.85 + 15.1 +2, pozitie_bara[2] + lungime_bara_verticala / 2])
+    translate([ pozitie_bara[0] + 1, pozitie_bara[1] + 59.85 + grosime_bara_din_cadru +2, pozitie_bara[2] + lungime_bara_verticala / 2])
     rotate([45, 0, 0])
     cube([1, 15, 100]);
     
@@ -237,11 +220,7 @@ module bloc_motor(){
 
 }
 
-
-irobot();
-cadru();
-ghidaje_suport_sus_jos();
-
+module ghidaje_filet() {
 //cilindru ghidaj suport bara filetata jos
 translate(pozitie_bara_oriz_sp)
 rotate([0, 0, 90])
@@ -281,12 +260,49 @@ translate ([-41,-10,0])
 translate([dimensiuni_ghidaj[0] / 2, latime_ghidaj_suport_bara_filetata / 2, 0])
 rotate([0, 180, 0])
     cilindru_ghidaj_suport_bara_filetata();
+}
 
-
-
-
+module motor() {
 
 pozitie_suport_motor = pozitie_bara_oriz_sp + [lungime_bara_orizontala-105, -2-80, 0];
 translate(pozitie_suport_motor)
 bloc_motor();
 // ax_gear(); // TODO: Make this work (a doua rotita)
+}
+
+
+// suport tava
+module suport_tava() {
+pozitie_suport = 180;
+lungime_suport = 333.3;
+translate(pozitie_bara_oriz_sus_f)
+translate([pozitie_suport,0,0])
+bara(lungime_suport);
+translate(pozitie_bara_oriz_sus_f)
+translate([pozitie_suport,0,0])
+translate([89, 0, 0])
+rotate([0,0,90])
+bara(lungime_suport);
+translate(pozitie_bara_oriz_sus_sp)
+translate([pozitie_suport,0,0])
+translate([89, 0, 0])
+rotate([0,0,180])
+bara(lungime_suport);
+}
+
+module oval(w,h, height, center = false) {
+  scale([1, h/w, 1]) cylinder(h=height, r=w, center=center);
+}
+
+module tava() {
+	translate([100,-10,745])
+	oval(80, 150);
+}
+
+//irobot();
+cadru();
+ghidaje_suport_sus_jos();
+ghidaje_filet();
+motor();
+suport_tava();
+tava();
