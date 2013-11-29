@@ -236,7 +236,7 @@ rotate([0, 0, 90])
 translate([-distanta_cadru / 2, -dimensiuni_ghidaj[1] / 2 - pozitie_ghidaj_cadru - latime_ghidaj_suport_bara_filetata - 2.5, 1])
     translate ([-41,-10,0]) 	
 translate([dimensiuni_ghidaj[0] / 2, latime_ghidaj_suport_bara_filetata / 2, dimensiuni_cub2[2]])
-    cylinder (r = 5, h = inaltime_bara_cilindrica, $fn = 50);
+    cylinder (r = 5, h = inaltime_bara_cilindrica-10, $fn = 50);
 
 
 //ghidaj suport bara filetata jos
@@ -299,10 +299,22 @@ module tava() {
 	oval(80, 150);
 }
 
-//irobot();
+module bara_webcam() {
+	translate([-170,40,915])
+	rotate([0,90,0])
+	cylinder(h=200, r=3);
+	translate([-160,40,930])
+	sphere(r=16);
+	translate([20,40,930])
+	sphere(r=16);
+
+}
+
+irobot();
 cadru();
 ghidaje_suport_sus_jos();
 ghidaje_filet();
 motor();
 suport_tava();
 tava();
+bara_webcam();
