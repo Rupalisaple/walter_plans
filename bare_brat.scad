@@ -39,7 +39,7 @@ dist_gauri_lun = 35.695;
 dist_gauri_lat = 22.635;      
 
 difference() {
-translate([0,0,20])
+translate([0,0,10])
 cube([lungime_suport, 5, 60]);
 
 //gauri TODO: measure
