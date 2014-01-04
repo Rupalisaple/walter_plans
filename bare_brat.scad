@@ -7,7 +7,12 @@ diametru_gaura_suport = 21;
 pozitie_gaura_suport = [6.5+diametru_gaura_suport/2, latime_suport/2+3, 0];
 
 distanta_suport_filet = 41.4;
+
+
+//TODO: SET DIAMETER TO 22 !! but not sure what happens!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 diametru_filet = 19;
+
+
 pozitie_filet = [pozitie_gaura_suport[0] + distanta_suport_filet+(diametru_gaura_suport+diametru_filet)/2, latime_suport/2 +3, 0];
 
 // Legaturile cu barele
